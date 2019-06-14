@@ -18,7 +18,8 @@ namespace ContosoUniversity_V2.Models
 
         [StringLength(50, MinimumLength = 1)]
         [Display(Name = "Office Location")]
-        [DisplayFormat(NullDisplayText = "No office")]
+        //[DisplayFormat(NullDisplayText = "No office")] //we aren't displaying location if the Instructors
+                                                         //office assignment is null so this is useless
         public string Location { get; set; }
 
         [Required] //redundant but enforces that an OfficeAssignment cannot exist without an Instructor

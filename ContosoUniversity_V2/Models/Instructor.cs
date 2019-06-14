@@ -25,7 +25,7 @@ namespace ContosoUniversity_V2.Models
         [DataType(DataType.Date), Display(Name = "Hire Date")] //you can put multiple attribute
                                                                //assignments on one line separated
                                                                //by commas within the same square brackets
-        [DisplayFormat(DataFormatString = "0:yyyy-MM-dd", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime HireDate { get; set; }
 
         [Display(Name = "Full Name")]

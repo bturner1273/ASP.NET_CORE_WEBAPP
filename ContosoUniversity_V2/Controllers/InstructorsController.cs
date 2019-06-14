@@ -37,18 +37,24 @@ namespace ContosoUniversity_V2.Controllers
                 .OrderBy(i => i.LastName) //order instructors by last name alphabetical
                 .ToListAsync();
 
+            //if the instructor's ID is passed in as a parameter to the GET
             if (id != null)
             {
                 ViewData["InstructorID"] = id.Value;
-                Instructor instructor = viewModel.Instructors.Where(
-                    i => i.ID == id.Value).Single();
-                viewModel.Courses = instructor.CourseAssignments.Select(s => s.Course);
+                Instructor instructor = viewModel.Instructors.Where( //select the instructor with this id from
+                                                                     //the list of instructors in the view model
+                    i => i.ID == id.Value).Single(); //.Where(...).Single() is the same as .Single(...)
+                viewModel.Courses = instructor.CourseAssignments.Select(s => s.Course); //loads the viewModels courses
+                                                                                        //with the courses from the instructors
+                                                                                        //CourseAssignments navigational property
             }
 
+            //if a courseID is passed as a parameter to a GET on the Instructors detail page
             if (courseID != null)
             {
                 ViewData["CourseID"] = courseID.Value;
-                viewModel.Enrollments = viewModel.Courses.Where(
+                viewModel.Enrollments = viewModel.Courses.Where( //load the view model with the enrollments of 
+                                                                 //the course with that courseID
                     x => x.CourseID == courseID).Single().Enrollments;
             }
 
@@ -103,7 +109,10 @@ namespace ContosoUniversity_V2.Controllers
                 return NotFound();
             }
 
-            var instructor = await _context.Instructors.FindAsync(id);
+            var instructor = await _context.Instructors
+                .Include(i => i.CourseAssignments)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (instructor == null)
             {
                 return NotFound();
